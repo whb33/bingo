@@ -1,0 +1,6 @@
+server:
+  port: 80
+  context-path: /springbootdemo
+spring:
+  profiles:
+    active: dev
