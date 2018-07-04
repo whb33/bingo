@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>小和玛直播后台</title>
+<link rel="stylesheet" type="text/css" th:href="@{js/lib/easyui/themes/default/easyui.css}">
+<link rel="stylesheet" type="text/css" th:href="@{wap/js/lib/easyui/themes/icon.css}">
+<link rel="stylesheet" type="text/css" th:href="@{wap/js/lib/easyui/themes/mobile.css}">
+<link rel="stylesheet" type="text/css" th:href="@{css/index.css}">
+<script th:inline="javascript" type="text/javascript">
+// <![CDATA[
+	var basePath = [[${contextPath}]];
+	var fileSuffix = [[${fileSuffix}]];
+// ]]>
+</script>
+</head>
+<body class="easyui-layout">
+<div id="console" class="easyui-layout" data-options="fit:true">
+	<div style="padding:0px;border:0px solid #ddd;" data-options="region:'north'">
+		<table>
+			<tr>
+				<td><span>姓名</span>&nbsp;<input type="text" id="name_search" style="width: 92px;" class="easyui-textbox"/></td>
+				<td>
+					<a class="easyui-linkbutton" iconCls="icon-search" plain="true" id="search" href="javascript:void(0);">搜索</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div data-options="region:'center'" style="border: 0px;padding:2px;">
+		<table id="datagrid" toolbar="#toolbar" class="easyui-datagrid"></table>
+	</div>
+	<div id="toolbar">
+		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-ok" plain="true" id="viewHonorguess">查看</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true" id="addHonorguess">新增</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-edit" plain="true" id="editHonorguess">编辑</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" plain="true" id="deleteHonorguess">删除</a>
+	</div>
+</div>
+<div id="dlg" class="easyui-window" style="width: 320px; height: 350px; padding: 10px" data-options="closed:true,modal:true,collapsible:false,minimizable:false,maximizable:false">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'center',border:false" style="padding:0px;">
+			<form id="insert_form" method="post" enctype="multipart/form-data">
+				<div class="fitem">
+					<label>姓名:</label>
+					<input name="name" id="insert-name" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div class="fitem">
+					<label>公司名称:</label>
+					<input name="company" id="insert-company" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div class="fitem">
+					<label>职位:</label>
+					<input name="position" id="insert-position" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div id="insertPic-div" class="fitem">
+					<label>图片:</label>
+					<input name="picture" type="file" class="easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div class="fitem">
+					<label>是否显示:</label>
+					<select name="display" id="insert-display" class="easyui-combobox">
+						<option value="0">不显示</option>
+						<option value="1">显示</option>
+					</select>
+				</div>
+				<div class="fitem">
+					<label>排序号:</label>
+					<input name="sortnum" id="insert-sortnum" type="text" class="easyui-numberbox easyui-validatebox" data-options="required:true"/>
+				</div>
+			</form>
+		</div>
+		<div data-options="region:'south',border:false" style="text-align:right;padding:5px 1px 2px;">
+			<a class="easyui-linkbutton" href="javascript:void(0);" id="insert-confirm" data-options="iconCls:'icon-ok'" plain="true" style="width:70px">确定</a>
+			<a class="easyui-linkbutton" href="javascript:void(0);" id="insert-cancel" data-options="iconCls:'icon-cancel'" plain="true" style="width:70px">取消</a>
+		</div>
+	</div>
+</div>
+<div id="dlg-edit" class="easyui-window" style="width: 320px; height: 350px; padding: 10px" data-options="closed:true,modal:true,collapsible:false,minimizable:false,maximizable:false">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'center',border:false" style="padding:0px;">
+			<form id="edit_form" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="id" id="edit-id">
+				<div class="fitem">
+					<label>姓名:</label>
+					<input name="name" id="edit-name" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div class="fitem">
+					<label>公司名称:</label>
+					<input name="company" id="edit-company" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div class="fitem">
+					<label>职位:</label>
+					<input name="position" id="edit-position" type="text" class="easyui-textbox easyui-validatebox" data-options="required:true"/>
+				</div>
+				<div id="editPic-div" class="fitem">
+					<label>图片:</label>
+					<input name="picture" type="file"/>
+				</div>
+				<div class="fitem">
+					<label>是否显示:</label>
+					<select name="display" id="edit-display" class="easyui-combobox">
+						<option value="0">不显示</option>
+						<option value="1">显示</option>
+					</select>
+				</div>
+				<div class="fitem">
+					<label>排序号:</label>
+					<input name="sortnum" id="edit-sortnum" type="text" class="easyui-numberbox easyui-validatebox" data-options="required:true"/>
+				</div>
+			</form>
+		</div>
+		<div data-options="region:'south',border:false" style="text-align:right;padding:5px 1px 2px;">
+			<a class="easyui-linkbutton" href="javascript:void(0);" id="edit-confirm" data-options="iconCls:'icon-ok'" plain="true" style="width:70px">确定</a>
+			<a class="easyui-linkbutton" href="javascript:void(0);" id="edit-cancel" data-options="iconCls:'icon-cancel'" plain="true" style="width:70px">取消</a>
+		</div>
+	</div>
+</div>
+<div id="dlg-lookup" class="easyui-window" style="width: 655px; height: 415px; padding: 10px 20px" data-options="closed:true,modal:true,collapsible:false,minimizable:false,maximizable:false">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'center',border:false" style="padding:0px;">
+			<table border="0">
+				<tr>
+					<td>
+						<div class="easyui-panel" style="width:300px;height:310px;padding:5px;background:#fafafa;overflow-x:hidden;overflow-y:hidden" data-options="collapsible:true,minimizable:true,maximizable:true">  
+							<div class="ftitle">基本信息</div>
+							<div class="fitem">
+								<label>姓名:</label>
+								<span id="lookup-name"></span>
+							</div>
+							<div class="fitem">
+								<label>公司名称:</label>
+								<span id="lookup-company"></span>
+							</div>
+							<div class="fitem">
+								<label>职位:</label>
+								<span id="lookup-position"></span>
+							</div>
+							<div class="fitem">
+								<label>是否显示:</label>
+								<span id="lookup-display"></span>
+							</div>
+							<div class="fitem">
+								<label>排序号:</label>
+								<span id="lookup-sortnum"></span>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div id="look-images" class="easyui-panel" style="width:300px;height:310px;background:#fafafa;overflow-x:hidden;overflow-y:hidden" data-options="collapsible:true,minimizable:true,maximizable:true"></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div data-options="region:'south',border:false" style="text-align:right;padding:5px 1px 2px;">
+			<a class="easyui-linkbutton" href="javascript:void(0);" id="lookup-close" data-options="iconCls:'icon-ok'" plain="true" style="width:70px">关闭</a>
+		</div>
+	</div>
+</div>
+<script th:src="@{res/wap/js/lib/require.js}" data-th-attr="data-main=@{res/wap/js/scripts/index.js}"></script>
+</body>
+</html>

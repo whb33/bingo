@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>移动认证峰会论坛后台</title>
+<link rel="stylesheet" type="text/css" th:href="@{res/wap/js/lib/easyui/themes/default/easyui.css}">
+<link rel="stylesheet" type="text/css" th:href="@{res/wap/js/lib/easyui/themes/icon.css}">
+<link rel="stylesheet" type="text/css" th:href="@{res/wap/js/lib/easyui/themes/mobile.css}">
+<link rel="stylesheet" type="text/css" th:href="@{res/wap/css/menu.css}">
+<script th:inline="javascript" type="text/javascript">
+	var basePath = [[${contextPath}]];
+</script>
+</head>
+<body class="easyui-layout">
+<div class="header" id="header">
+	<div class="pageLogo"><span>移动认证峰会论坛</span>管理后台</div>
+	<div class="linkHeader">
+		<a class="btn_people" href="javascript:void(0);" id="changePassword">admin</a>
+		<a class="btn_switch" href="javascript:void(0);" id="loginOut"></a>
+	</div>
+</div>
+<div class="menuLeft">
+	<div class="mL_tit">
+		<b class="tit" id="tit">管理菜单</b>
+		<a class="ss" id="ss" href="javascript:void(0);"></a>
+	</div>
+	<div class="mL_con">
+		<ul>
+			<li class="mL_li menu_1">
+				<a class="mL_a" href="javascript:void(0);" onclick="addTabs('现场页-出席嘉宾','/honorguess')">
+					<span>现场页-出席嘉宾</span>
+				</a>
+				<a class="mL_a" href="javascript:void(0);" onclick="addTabs('现场页-现场回顾','/bigboss')">
+					<span>现场页-现场回顾</span>
+				</a>
+				<a class="mL_a" href="javascript:void(0);" onclick="addTabs('产品页-产品视频','/video')">
+					<span>产品页-产品视频</span>
+				</a>
+				<a class="mL_a" href="javascript:void(0);" onclick="addTabs('新闻页-新闻报导','/news')">
+					<span>新闻页-新闻报导</span>
+				</a>
+				<a class="mL_a" href="javascript:void(0);" onclick="addTabs('关于页-合作查看','/about')">
+					<span>关于页-合作查看</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="container" id="container" >
+	<div id="page_content" class="page_content">
+		<div id="tabs" class="easyui-tabs" border="false" fit="true"></div>
+	</div>
+</div>
+<div id="w" class="easyui-window" title="修改密码" data-options="closed:true,modal:true,collapsible:false,minimizable:false,maximizable:false"
+      style="width: 300px; height: 210px; padding: 5px; background: #fafafa;">
+	<div class="easyui-layout" fit="true">
+		<div region="center" border="false" style="padding: 10px; background: #fff;">
+			<table>
+				<tr>
+					<td>原密码：</td>
+					<td><input id="txtOriginPass" type="Password" class="easyui-textbox" /></td>
+				</tr>
+				<tr>
+					<td>新密码：</td>
+					<td><input id="txtNewPass" type="Password" class="easyui-textbox" /></td>
+				</tr>
+				<tr>
+					<td>确认密码：</td>
+					<td><input id="txtRePass" type="Password" class="easyui-textbox" /></td>
+				</tr>
+			</table>
+		</div>
+		<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
+			<a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0);" plain="true"> 确定</a>
+			<a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0);" plain="true">取消</a>
+		</div>
+	</div>
+</div>
+<script th:src="@{res/wap/js/lib/require.js}" data-th-attr="data-main=@{res/wap/js/scripts/menu.js}"></script>
+</body>
+</html>

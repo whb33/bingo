@@ -1,0 +1,8 @@
+database:
+  className: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  jdbcUrl: jdbc:log4jdbc:oracle:thin:@192.168.18.121:1521:gzdev
+  username: p_tyjf
+  password: ZuC003uBmJc6JrbQ4SiG
+  maximumPoolSize: 5
+  maxLifetime: 27000000
+  poolName: demopool

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<title>登录页面</title>
+<link rel="stylesheet" type="text/css" th:href="@{../css/login.css}">
+<script th:inline="javascript" type="text/javascript">
+	var basePath = [[${contextPath}]];
+</script>
+<script th:src="@{../js/lib/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript">
+    //加载时适应浏览器高度
+	$(document).ready(function() {
+		$(".login").css("height", $(window).height());
+	});
+	//改变窗体大小时适应浏览器高度
+	$(window).resize(function() {
+		$(".login").css("height", $(window).height());
+	});
+</script>
+</head>
+<body>
+<div class="login">
+    <div class="login_bar">
+        <h3>请登录</h3>
+        <form id="loginForm" method="post">
+	        <div class="login_w">
+	            <div class="login_item">
+	                <label>用户名：</label>
+	                <div class="input_w">
+	                    <input type="text" autocomplete="off" class="l_input_style" id="username" name="account">
+	                </div>
+	            </div>
+	            <div class="login_item mt20">
+	                <label>密码：</label>
+	                <div class="input_w">
+	                    <input type="password" autocomplete="off" class="l_input_style" id="password" name="password">
+	                </div>
+	            </div>
+	            <div class="login_item mt20">
+	                <label>验证码：</label>
+	                <div class="input_w">
+	                    <input type="text" autocomplete="off" class="l_input_style2" id="vcode">
+	                </div>
+	                <a href="javascript:void(0);" class="vcode"><img id="captchaImg" th:src="@{/vcode/random}" alt=""></a>
+	            </div>
+	            <div class="login_btn">
+	                <input type="button" value="登录" id="login">
+	            </div>
+	        </div>
+	    </form>
+    </div>
+</div>
+<script th:src="@{../js/lib/require.js}" data-th-attr="data-main=@{../js/scripts/login.js}"></script>
+</body>
+</html>
