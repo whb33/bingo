@@ -5,7 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ChineseUtills {
+public class ChineseUtils {
 
 	private static boolean isChinese(char c) {
 		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);

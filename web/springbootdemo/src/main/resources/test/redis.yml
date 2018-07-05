@@ -1,0 +1,10 @@
+#redis单机
+redis:
+  ip: 192.168.18.235
+  port: 6379
+  maxTotal: 100
+  maxIdle: 5
+  minIdle: 5
+  maxWaitMillis: 3000
+  testOnBorrow: true
+  softMinEvictableIdleTimeMillis: 300000

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:${spring.profiles.active}/redis.properties")
+@PropertySource("classpath:${spring.profiles.active}/redis.yml")
 @ConfigurationProperties(prefix = "redis")
 @Data
 public class RedisProperties {

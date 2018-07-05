@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:${spring.profiles.active}/db.properties")
+@PropertySource("classpath:${spring.profiles.active}/database.yml")
 @ConfigurationProperties(prefix = "db")
 @Data
 public class DatabaseProperties {
