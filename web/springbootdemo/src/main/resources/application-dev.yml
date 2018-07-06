@@ -1,0 +1,76 @@
+#oracle
+log4jdbcOracleDatabase:
+  className: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  jdbcUrl: jdbc:oracle:thin:@192.168.18.121:1521:gzdev
+  username: p_tyjf
+  password: ZuC003uBmJc6JrbQ4SiG
+  maximumPoolSize: 5
+  maxLifetime: 27000000
+  poolName: demopool
+oracleDatabase:
+  className: oracle.jdbc.pool.OracleDataSource
+  serverName: 192.168.18.121
+  portNumber: 1521
+  databaseName: gzdev
+  driverType: thin
+  username: p_tyjf
+  password: ZuC003uBmJc6JrbQ4SiG
+  maximumPoolSize: 5
+  maxLifetime: 27000000
+  poolName: demopool
+mysqlDatabase:
+  className: com.mysql.jdbc.Driver
+  jdbcUrl: jdbc:mysql://192.168.18.121:3306/gdkf
+  username: yzkf
+  password: yzkf
+  initialSize: 10
+  minIdle: 5
+  maxActive: 30
+  maxWait: 60000
+  timeBetweenEvictionRunsMillis: 60000
+  minEvictableIdleTimeMillis: 300000
+  maxLifetime: 27000000
+
+#log4jdbc:
+#  spylogdelegator:
+#    name: net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator
+
+logging:
+  file: demo.log
+  path: C:\\Users\\THINKPAD\\Desktop
+  config: classpath:logback-spring.xml
+  level: info
+
+
+#memcached
+memcached:
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  type-aliases-package: com.bingo.web.springbootdemo.entity
+  global-config:
+    id-type: 3
+    field-strategy: 2
+    db-column-underline: true
+    refresh-mapper: true
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    jdbc-type-for-null: null
+
+#redis单机
+redis:
+  ip: 192.168.18.235
+  port: 6379
+  maxTotal: 100
+  maxIdle: 5
+  minIdle: 5
+  maxWaitMillis: 3000
+  testOnBorrow: true
+  softMinEvictableIdleTimeMillis: 300000
+
+#redis集群
+redis-cluster:
+

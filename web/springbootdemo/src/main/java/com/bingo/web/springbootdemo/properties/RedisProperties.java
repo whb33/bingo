@@ -2,15 +2,12 @@ package com.bingo.web.springbootdemo.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:${spring.profiles.active}/redis.yml")
 @ConfigurationProperties(prefix = "redis")
 @Data
 public class RedisProperties {
-	
 	private String ip;
 	private Integer port;
 	private int maxTotal;
@@ -19,5 +16,4 @@ public class RedisProperties {
 	private Long maxWaitMillis;
 	private boolean testOnBorrow;
 	private Long softMinEvictableIdleTimeMillis;
-
 }

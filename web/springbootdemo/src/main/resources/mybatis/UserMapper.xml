@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.coco.admin.web.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="cn.coco.admin.web.model.User">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="SIGN_ID" property="signId" jdbcType="VARCHAR"/>
+        <result column="OPENID" property="openid" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="IS_SYSROLE" property="isSysrole" jdbcType="VARCHAR"/>
+        <result column="IS_ATTENTION" property="isAttention" jdbcType="VARCHAR"/>
+        <result column="ICON_PC" property="iconPc" jdbcType="VARCHAR"/>
+        <result column="HEADIMGURL" property="headimgurl" jdbcType="VARCHAR"/>
+        <result column="RECOMM" property="recomm" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="POWER" property="power" jdbcType="DECIMAL"/>
+        <result column="MEDAL_J" property="medalJ" jdbcType="DECIMAL"/>
+        <result column="MEDAL_Y" property="medalY" jdbcType="DECIMAL"/>
+        <result column="MEDAL_T" property="medalT" jdbcType="DECIMAL"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+        <result column="RESERVATION1" property="reservation1" jdbcType="VARCHAR"/>
+        <result column="RESERVATION2" property="reservation2" jdbcType="VARCHAR"/>
+        <result column="NICKNAME" property="nickname" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List">
+		ID, SIGN_ID, OPENID, PHONE, IS_SYSROLE, IS_ATTENTION, ICON_PC,
+		HEADIMGURL, RECOMM,
+		NAME, POWER, MEDAL_J, MEDAL_Y, MEDAL_T, CREATE_TIME, UPDATE_TIME,
+		RESERVATION1, RESERVATION2,
+		NICKNAME
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from T_USER
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    
+</mapper>

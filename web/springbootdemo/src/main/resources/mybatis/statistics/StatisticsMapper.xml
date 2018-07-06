@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.coco.admin.web.mapper.statistics.StatisticsMapper" >
+
+<resultMap id="getSurveyMap" type="java.util.Map">
+    <result property="登录人数" column="登录人次" />
+    <result property="登录人数" column="登录人数" />
+    <result property="pv" column="pv" />
+    <result property="uv" column="uv" />
+    <result property="抽奖人数" column="抽奖人数" />
+    <result property="中奖人数" column="中奖人数" />
+    <result property="新增用户" column="新增用户" />
+    <result property="operat_type" column="operat_type" />
+</resultMap>
+
+  <select id="recentlySurvey" resultType="java.util.Map">
+  	<!-- select * from (
+	select a.日期, a.登录人次,a.登录人数, b.pv, b.uv ,nvl(c.抽奖人数,0) 抽奖人数,nvl(d.中奖人数,0) 中奖人数,nvl(e.新增用户,0) 新增用户,a.operat_type
+	  from (select to_char(create_time, 'yyyy-mm-dd') 日期,
+	               count(1) 登录人次,
+	               count(distinct u_id) 登录人数,
+		       substr(operat_type,0,instr(operat_type,'_',1,1)-1) operat_type
+	          from T_AYYX_OPERAT_LOG where create_time between (sysdate-6) and (sysdate) and operat_type like '%_login%'
+	         group by to_char(create_time, 'yyyy-mm-dd'),substr(operat_type,0,instr(operat_type,'_',1,1)-1)) a
+	  left join (
+	  select to_char(t.create_time, 'yyyy-mm-dd') 日期,count(1) pv,count(distinct t.reservation2) uv,substr(operat_type,0,instr(operat_type,'_',1,1)-1) operat_type from t_ayyx_operat_log t where create_time between (sysdate-6) and (sysdate)
+	  group by to_char(t.create_time, 'yyyy-mm-dd'),substr(operat_type,0,instr(operat_type,'_',1,1)-1) order by 日期 asc
+	  ) b on a.日期 = b.日期 and a.operat_type = b.operat_type
+	  left join (
+	  select to_char(CURTIME, 'yyyy-mm-dd') 日期,count(1) 抽奖人数,PROJECTCODE from T_Y_ZHYX_PUBLIC_DRAWLOG where CURTIME between (sysdate-6) and (sysdate) group by to_char(CURTIME, 'yyyy-mm-dd'),PROJECTCODE
+	  ) c on b.日期 = c.日期 and a.operat_type = c.PROJECTCODE
+	  left join (
+	  select to_char(CURTIME, 'yyyy-mm-dd') 日期,count(1) 中奖人数,PROJECTCODE from T_Y_ZHYX_PUBLIC_WINLOG where CURTIME between (sysdate-6) and (sysdate) group by to_char(CURTIME, 'yyyy-mm-dd'),PROJECTCODE
+	  ) d on a.日期 = d.日期 and a.operat_type = d.PROJECTCODE
+	  left join (
+	  select to_char(CREATE_TIME,'yyyy-mm-dd') 日期,count(1) 新增用户 from T_USER where CREATE_TIME between (sysdate-6) and (sysdate) GROUP BY to_char(CREATE_TIME,'yyyy-mm-dd')
+	  ) e on a.日期 = e.日期
+	) order by 日期 asc -->
+	select * from (
+	select a.日期,a.pv,a.uv,nvl(b.登录人次,0) 登录人次,nvl(b.登录人数,0) 登录人数,nvl(c.抽奖人数,0) 抽奖人数,nvl(d.中奖人数,0) 中奖人数,nvl(e.分享人数,0) 分享人数,a.PROJECTCODE from (
+	select to_char(CREATETIME, 'yyyy-mm-dd') 日期,count(1) pv,count(distinct SESSIONID) uv,PROJECTCODE from T_OPERATIONS_VISIT_LOG 
+	where CREATETIME between (sysdate-6) and (sysdate) group by to_char(CREATETIME, 'yyyy-mm-dd'),PROJECTCODE
+	) a left join (
+	select to_char(CREATETIME, 'yyyy-mm-dd') 日期,count(1) 登录人次,count(distinct USERID) 登录人数,PROJECTCODE
+	from T_OPERATIONS_LOGIN_LOG where CREATETIME between (sysdate-6) and (sysdate) group by to_char(CREATETIME, 'yyyy-mm-dd'),PROJECTCODE
+	) b on a.日期 = b.日期 and a.PROJECTCODE = b.PROJECTCODE
+	left join (
+	select to_char(CURTIME, 'yyyy-mm-dd') 日期,count(1) 抽奖人数,PROJECTCODE from T_Y_ZHYX_PUBLIC_DRAWLOG where CURTIME between (sysdate-6) and (sysdate) group by to_char(CURTIME, 'yyyy-mm-dd'),PROJECTCODE
+	) c on a.日期 = c.日期 and a.PROJECTCODE = c.PROJECTCODE
+	left join (
+	select to_char(CURTIME, 'yyyy-mm-dd') 日期,count(1) 中奖人数,PROJECTCODE from T_Y_ZHYX_PUBLIC_WINLOG where CURTIME between (sysdate-6) and (sysdate) group by to_char(CURTIME, 'yyyy-mm-dd'),PROJECTCODE
+	) d on a.日期 = d.日期 and a.PROJECTCODE = d.PROJECTCODE
+	left join (
+	select to_char(CREATETIME, 'yyyy-mm-dd') 日期,PROJECTCODE,count(1) 分享人数 from T_OPERATIONS_SHARE_LOG where CREATETIME between (sysdate-6) and (sysdate) group by to_char(CREATETIME, 'yyyy-mm-dd'),PROJECTCODE
+	) e on a.日期 = e.日期 and a.PROJECTCODE = e.PROJECTCODE
+	) order by 日期 asc
+  </select>
+  <select id="recentlyProject" resultType="java.lang.String">
+  	<!-- select substr(operat_type,0,instr(operat_type,'_',1,1)-1) projectcode from T_AYYX_OPERAT_LOG where create_time between (sysdate-6) and (sysdate) group by substr(operat_type,0,instr(operat_type,'_',1,1)-1) -->
+    select PROJECTCODE from T_OPERATIONS_VISIT_LOG where CREATETIME between (sysdate-6) and (sysdate) group by PROJECTCODE
+  </select>
+</mapper>

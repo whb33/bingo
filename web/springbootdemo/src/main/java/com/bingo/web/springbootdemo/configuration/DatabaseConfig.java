@@ -18,15 +18,16 @@ public class DatabaseConfig {
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(databaseProperties.getClassName());
-        config.setJdbcUrl(databaseProperties.getJdbcUrl());
+        config.setDataSourceClassName(databaseProperties.getClassName());
+        config.addDataSourceProperty("serverName", databaseProperties.getServerName());
+        config.addDataSourceProperty("portNumber", databaseProperties.getPortNumber());
+        config.addDataSourceProperty("databaseName", databaseProperties.getDatabaseName());
+        config.addDataSourceProperty("driverType", databaseProperties.getDriverType());
         config.setUsername(databaseProperties.getUsername());
         config.setPassword(databaseProperties.getPassword());
         config.setMaximumPoolSize(databaseProperties.getMaximumPoolSize());
         config.setMaxLifetime(databaseProperties.getMaxLifetime());
         config.setPoolName(databaseProperties.getPoolName());
-        HikariDataSource dataSource = new HikariDataSource(config);
-        return dataSource;
+        return new HikariDataSource(config);
     }
-
 }

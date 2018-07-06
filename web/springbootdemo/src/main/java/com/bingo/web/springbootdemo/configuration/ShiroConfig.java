@@ -1,3 +1,4 @@
+/*
 package com.bingo.web.springbootdemo.configuration;
 
 import com.bingo.web.springbootdemo.shiro.CustomCredentialsMatcher;
@@ -65,3 +66,4 @@ public class ShiroConfig {
     }
 
 }
+*/

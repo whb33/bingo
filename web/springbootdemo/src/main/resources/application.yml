@@ -7,7 +7,9 @@ spring:
   thymeleaf:
     mode: LEGACYHTML5
     cache: false
+  jndi:
+    ignore: true
 global:
   projectCode: demp-project-code
-  shirosecret: secret-shiro
+  shiroSecret: secret-shiro
 
