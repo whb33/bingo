@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>登录界面</title>
+    <script th:src="@{business/js/jquery-1.8.2.min.js}"></script>
+    <script th:src="@{business/js/jquery.cycle.all.js}"></script>
+    <script th:src="@{business/js/jquery.form.min.js}"></script>
+    <script th:src="@{business/js/ajaxfileupload.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{business/css/login.css}">
+</head>
+<body>
+<div class="container">
+    <!--<img th:src="@{business/images/logo.jpg}" style="width:50%;position: absolute;left: 50%;margin-left: -25%;top: 50%;margin-top: -350px;"/>-->
+    <form id="cform" action="#" method="post">
+        <div class="login_div">
+            <div class="login_inner" style="text-align: center; width: 100%;padding-top:75px;">
+                <input type="text" name="username" class="login_text login_div_space username" placeholder="账号" autocomplete="off" autocapitalize="off" value=""/>
+                <input type="password" name="password" class="login_text login_div_space password" placeholder="密码" autocomplete="off" autocapitalize="off" value="" />
+                <div style="width:300px;margin:0 auto;height:40px;">
+                    <input type="text" id="captcha" name="captcha" class="login_text login_div_space" placeholder="请输入验证码" autocapitalize="off"/>
+                    <a href="javascript:changeImg();" style="float:right;">
+                        <img id="captchaImg" th:src="@{captcha1}"/>
+                    </a>
+                </div>
+                <div id="signBtn" class="login_div_loginbtn" style="margin-bottom: 10px;">
+                    登录
+                </div>
+                <!--<div class="login_div_btns">
+                    <div class="right">
+                        <a href="javascript:void(0);">忘记密码</a>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    function imgdragstart() {
+        return false;
+    }
+
+    function changeImg() {
+        $("#captchaImg").attr('src', 'captcha1?nocache=' + (new Date().getTime()));
+    }
+
+    var index = 0;
+    $(document).ready(function () {
+        //配置图片不可拖拉
+        for (i in document.images) {
+            document.images[i].ondragstart = imgdragstart;
+        }
+        $("#signBtn").bind("click", function () {
+            var username = $("input[name='username']").val();
+            var password = $("input[name='password']").val();
+            if (username == "" || password == "") {
+                alert("请输入");
+                return;
+            }
+            $("#cform").ajaxSubmit({
+                type: 'POST',
+                cache: false,
+                url: "/login",
+                success: function (data) {
+                    var obj = eval(data);
+                    console.log(obj.code);
+                    if (obj.code == 1) {
+                        window.location.href = "captcha1";
+                    } else {
+                        alert(obj.msg);
+                    }
+                },
+                error: function (error) {
+                    alert("数据提交失败，服务器可能出现错误，请稍后再试。");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

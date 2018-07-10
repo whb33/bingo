@@ -1,5 +1,6 @@
 package com.bingo.web.springbootdemo.shiro;
 
+import com.bingo.web.springbootdemo.entity.ConsoleUser;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -23,10 +24,10 @@ public class MyShiroRealm extends AuthorizingRealm {
         if (username == null) {
             throw new AccountException("请输入登录账号！");
         }
-        /*ConsoleUser user = userService.findByUsername(username, globalProperties.getProjectcode());
+        ConsoleUser user = null;//userService.findByUsername(username, globalProperties.getProjectcode());
         if (user == null) {
         	throw new UnknownAccountException("您所输入的帐号[" + username + "]不存在或者已被删除！");
-        }*/
+        }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(null, "", getName());
         return info;
     }

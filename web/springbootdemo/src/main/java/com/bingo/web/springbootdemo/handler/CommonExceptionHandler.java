@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static com.bingo.web.springbootdemo.utils.ResultUtils.error;
+//import static com.bingo.web.springbootdemo.utils.ResultUtils.error;
 
 @ControllerAdvice
 @Slf4j
@@ -18,7 +18,7 @@ public class CommonExceptionHandler {
 	@ResponseBody
 	public Result<Object> ResultExceptionHandle(Exception e) {
 		ResultException exception = (ResultException) e;
-		return ResultUtils.error(exception.getCode(), exception.getMessage(), exception.getObject());
+		return null;//ResultUtils.error(exception.getCode(), exception.getMessage(), exception.getObject());
 	}
 	
 	@ExceptionHandler(value = Exception.class)

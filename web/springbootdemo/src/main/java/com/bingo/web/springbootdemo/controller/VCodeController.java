@@ -1,23 +1,26 @@
 package com.bingo.web.springbootdemo.controller;
 
-import com.bingo.web.springbootdemo.properties.GlobalProperties;
-import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.json.JSONObject;
 
 @Controller
 @Slf4j
@@ -29,8 +32,6 @@ public class VCodeController {
     @SuppressWarnings("rawtypes")
     @Autowired
     private RedisTemplate redisTemplate;
-    @Autowired
-    private GlobalProperties globalProperties;
 
     @RequestMapping(value = "/random")
     public void imageServletDo(HttpServletRequest request, HttpServletResponse response) {
@@ -39,7 +40,7 @@ public class VCodeController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expire", 0);
         try {
-            randomValidateCode.getRandcode(request, response);//输出图片方法
+            randomValidateCode.getRandomCode(request, response);//输出图片方法
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -49,7 +50,7 @@ public class VCodeController {
     @RequestMapping(value = "/validate")
     public void validateCode(HttpServletRequest request, HttpServletResponse response) throws Exception {
         boolean success = randomValidateCode.validateCode(request);
-        redisTemplate.opsForValue().set("vcode-" + request.getSession().getId(), "0", 10000, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set("vcode-" + request.getSession().getId(), "0", 2, TimeUnit.SECONDS);
         JSONObject ret = new JSONObject();
         ret.put("success", success);
         try {
@@ -62,31 +63,24 @@ public class VCodeController {
 
     /**
      * 描述：验证码生产类
-     *
-     * @author: dashu
-     * @since: 13-10-8
      */
     private class RandomValidateCode {
 
-        public static final String RANDOMCODEKEY = "RANDOMVALIDATECODEKEY"; //放到session中的key
+        private static final String RANDOM_CODE_KEY = "RANDOM_VALIDATE_CODE_KEY"; //放到session中的key
         private Random random = new Random();
-        private String randString = "0123456789";//随机产生的字符串 ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        private String randString = "0123456789";//随机产生的字符串 可放入英文字母
 
         private int width = 80;//图片宽
         private int height = 26;//图片高
         private int lineSize = 40;//干扰线数量
         private int stringNum = 4;//随机产生字符数量
 
-        /*
-         * 获得字体
-         */
+        // 获得字体
         private Font getFont() {
             return new Font("Fixedsys", Font.CENTER_BASELINE, 18);
         }
 
-        /*
-         * 获得颜色
-         */
+        // 获得颜色
         private Color getRandColor(int fc, int bc) {
             if (fc > 255)
                 fc = 255;
@@ -98,17 +92,15 @@ public class VCodeController {
             return new Color(r, g, b);
         }
 
-        public boolean validateCode(HttpServletRequest request) {
+        private boolean validateCode(HttpServletRequest request) {
             HttpSession session = request.getSession();
-            String sCode = session.getAttribute(RANDOMCODEKEY).toString();
+            String sCode = session.getAttribute(RANDOM_CODE_KEY).toString();
             String iCode = request.getParameter("code");
             return StringUtils.equals(sCode, iCode);
         }
 
-        /**
-         * 生成随机图片
-         */
-        public void getRandcode(HttpServletRequest request, HttpServletResponse response) {
+        // 生成随机图片
+        private void getRandomCode(HttpServletRequest request, HttpServletResponse response) {
             HttpSession session = request.getSession();
             //BufferedImage类是具有缓冲区的Image类,Image类是用于描述图像信息的类
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_BGR);
@@ -118,16 +110,15 @@ public class VCodeController {
             g.setColor(getRandColor(110, 133));
             //绘制干扰线
             for (int i = 0; i <= lineSize; i++) {
-                drowLine(g);
+                drawLine(g);
             }
             //绘制随机字符
             String randomString = "";
             for (int i = 1; i <= stringNum; i++) {
-                randomString = drowString(g, randomString, i);
+                randomString = drawString(g, randomString, i);
             }
-            session.removeAttribute(RANDOMCODEKEY);
-            session.setAttribute(RANDOMCODEKEY, randomString);
-//        System.out.println(randomString);
+            session.removeAttribute(RANDOM_CODE_KEY);
+            session.setAttribute(RANDOM_CODE_KEY, randomString);
             g.dispose();
             try {
                 ImageIO.write(image, "JPEG", response.getOutputStream());//将内存中的图片通过流动形式输出到客户端
@@ -136,10 +127,8 @@ public class VCodeController {
             }
         }
 
-        /*
-         * 绘制字符串
-         */
-        private String drowString(Graphics g, String randomString, int i) {
+        // 绘制字符串
+        private String drawString(Graphics g, String randomString, int i) {
             g.setFont(getFont());
             g.setColor(new Color(random.nextInt(101), random.nextInt(111), random.nextInt(121)));
             String rand = String.valueOf(getRandomString(random.nextInt(randString.length())));
@@ -149,10 +138,8 @@ public class VCodeController {
             return randomString;
         }
 
-        /*
-         * 绘制干扰线
-         */
-        private void drowLine(Graphics g) {
+        // 绘制干扰线
+        private void drawLine(Graphics g) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int xl = random.nextInt(13);
@@ -160,10 +147,8 @@ public class VCodeController {
             g.drawLine(x, y, x + xl, y + yl);
         }
 
-        /*
-         * 获取随机的字符
-         */
-        public String getRandomString(int num) {
+        // 获取随机的字符
+        private String getRandomString(int num) {
             return String.valueOf(randString.charAt(num));
         }
 

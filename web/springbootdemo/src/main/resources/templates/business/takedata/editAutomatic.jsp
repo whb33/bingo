@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/commons/taglibs.jsp"%>
-<jsp:include page="../commons/head.jsp">
+<jsp:include page="../commons/head.html">
 	<jsp:param value="手动提数" name="title" />
 	<jsp:param value="${ctx}" name="ctx" />
 </jsp:include>
